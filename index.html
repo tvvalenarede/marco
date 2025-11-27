@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delegado Olim - Marketing Digital no Vale do Paraíba</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         /* Reset e estilos base */
         * {
@@ -90,13 +89,6 @@
             background-color: #c53030;
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn:disabled {
-            background-color: #a0aec0;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
         
         /* Efeito de Estrelas */
@@ -373,12 +365,6 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            outline: none;
         }
         
         textarea.form-control {
@@ -386,24 +372,26 @@
             resize: vertical;
         }
         
-        /* Alertas */
-        .alert {
-            padding: 15px;
+        /* Mensagens de status do formulário */
+        .form-status {
+            padding: 10px;
+            margin: 15px 0;
             border-radius: 5px;
-            margin-bottom: 20px;
             display: none;
         }
         
-        .alert-success {
+        .form-status.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
+            display: block;
         }
         
-        .alert-error {
+        .form-status.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+            display: block;
         }
         
         /* Footer */
@@ -539,27 +527,6 @@
         
         .floating-button:hover .tooltip {
             opacity: 1;
-        }
-        
-        /* Loading */
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 10px 0;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--accent);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
         
         /* Responsividade */
@@ -818,12 +785,6 @@
     <section class="contato" id="contato">
         <div class="container">
             <h2>Entre em Contato</h2>
-            <div class="alert alert-success" id="successAlert">
-                Mensagem enviada com sucesso! Entraremos em contato em breve.
-            </div>
-            <div class="alert alert-error" id="errorAlert">
-                Ocorreu um erro ao enviar a mensagem. Tente novamente mais tarde.
-            </div>
             <div class="contato-container">
                 <div class="contato-info">
                     <div class="info-item">
@@ -857,28 +818,25 @@
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Nome</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
+                            <input type="text" id="name" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="email">E-mail</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
+                            <input type="email" id="email" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="subject">Assunto</label>
-                            <input type="text" id="subject" name="subject" class="form-control" required>
+                            <input type="text" id="subject" class="form-control" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="message">Mensagem</label>
-                            <textarea id="message" name="message" class="form-control" required></textarea>
+                            <textarea id="message" class="form-control" required></textarea>
                         </div>
                         
-                        <div class="loading" id="loading">
-                            <div class="spinner"></div>
-                            <p>Enviando mensagem...</p>
-                        </div>
+                        <div id="formStatus" class="form-status"></div>
                         
                         <button type="submit" class="btn" id="submitBtn">Enviar Mensagem</button>
                     </form>
@@ -923,10 +881,14 @@
         </div>
     </footer>
 
+    <!-- Incluindo a biblioteca EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <script>
-        // Inicializar EmailJS
-        // IMPORTANTE: Substitua com sua Public Key do EmailJS
-        emailjs.init("SUA_PUBLIC_KEY_AQUI");
+        // Inicializar EmailJS com sua chave pública
+        (function() {
+            emailjs.init("V1Lqa3KrlPgX3vqr9");
+        })();
         
         // Efeito de Estrelas
         function createStars() {
@@ -969,40 +931,52 @@
             });
         });
         
-        // Form submission com EmailJS - CORRIGIDO
+        // Form submission com EmailJS
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Mudar o texto do botão para indicar processamento
             const submitBtn = document.getElementById('submitBtn');
-            const successAlert = document.getElementById('successAlert');
-            const errorAlert = document.getElementById('errorAlert');
-            const loading = document.getElementById('loading');
-            
-            // Esconder alertas anteriores
-            successAlert.style.display = 'none';
-            errorAlert.style.display = 'none';
-            loading.style.display = 'block';
-            
-            // Desabilitar botão de envio
-            submitBtn.disabled = true;
+            const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+            
+            // Coletar dados do formulário
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                to_email: 'delegadoolimnovale@gmail.com'
+            };
             
             // Enviar email usando EmailJS
-            // IMPORTANTE: Substitua com seu Service ID e Template ID do EmailJS
-            emailjs.sendForm('SEU_SERVICE_ID_AQUI', 'SEU_TEMPLATE_ID_AQUI', this)
+            emailjs.send('service_1jk3eb', 'template_zyp8f5k', formData)
                 .then(function(response) {
                     console.log('SUCCESS!', response.status, response.text);
-                    successAlert.style.display = 'block';
+                    
+                    // Mostrar mensagem de sucesso
+                    const statusDiv = document.getElementById('formStatus');
+                    statusDiv.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                    statusDiv.className = 'form-status success';
+                    
+                    // Resetar formulário
                     document.getElementById('contactForm').reset();
+                    
+                    // Restaurar botão
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
                 }, function(error) {
                     console.log('FAILED...', error);
-                    errorAlert.style.display = 'block';
-                })
-                .finally(function() {
-                    // Reabilitar botão de envio e esconder loading
+                    
+                    // Mostrar mensagem de erro
+                    const statusDiv = document.getElementById('formStatus');
+                    statusDiv.textContent = 'Erro ao enviar a mensagem. Tente novamente ou entre em contato por outro meio.';
+                    statusDiv.className = 'form-status error';
+                    
+                    // Restaurar botão
+                    submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Enviar Mensagem';
-                    loading.style.display = 'none';
                 });
         });
         
