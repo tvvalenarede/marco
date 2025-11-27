@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delegado Olim - Marketing Digital no Vale do Paraíba</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         /* Reset e estilos base */
         * {
@@ -91,12 +93,6 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
-        .btn:disabled {
-            background-color: #a0aec0;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
         /* Efeito de Estrelas */
         #stars-container {
             position: fixed;
@@ -136,6 +132,12 @@
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 5px 0;
+            background-color: rgba(255, 255, 255, 0.98);
         }
         
         .header-container {
@@ -143,6 +145,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
+            transition: all 0.3s ease;
         }
         
         .logo {
@@ -169,19 +172,36 @@
             color: var(--dark);
             font-weight: 500;
             transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s;
         }
         
         nav ul li a:hover {
             color: var(--accent);
         }
         
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
         .mobile-menu {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: var(--primary);
         }
         
-        /* Hero Section - MELHORIAS NA IMAGEM */
+        /* Hero Section */
         .hero {
             background: linear-gradient(rgba(26, 54, 93, 0.7), rgba(26, 54, 93, 0.85)), url('OLIMUSAR20.jpg') center/cover no-repeat;
             color: white;
@@ -192,7 +212,6 @@
             overflow: hidden;
         }
         
-        /* Adicionando filtro para melhorar a nitidez da imagem */
         .hero::before {
             content: '';
             position: absolute;
@@ -246,7 +265,7 @@
             height: auto;
             display: block;
             transition: transform 0.5s ease;
-            filter: brightness(1.05); /* Melhorando a nitidez da imagem */
+            filter: brightness(1.05);
         }
         
         .sobre-img img:hover {
@@ -282,11 +301,12 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
         .video-item:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
         
         .video-thumb {
@@ -385,26 +405,23 @@
             resize: vertical;
         }
         
-        /* Mensagens de status do formulário */
-        .form-status {
+        .form-message {
+            margin-top: 15px;
             padding: 10px;
-            margin: 15px 0;
             border-radius: 5px;
             display: none;
         }
         
-        .form-status.success {
+        .form-message.success {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
-            display: block;
         }
         
-        .form-status.error {
+        .form-message.error {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
-            display: block;
         }
         
         /* Footer */
@@ -542,6 +559,22 @@
             opacity: 1;
         }
         
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         /* Responsividade */
         @media (max-width: 992px) {
             .sobre-container, .contato-container {
@@ -569,6 +602,7 @@
                 flex-direction: column;
                 padding: 20px;
                 box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
             }
             
             nav ul.active {
@@ -577,6 +611,10 @@
             
             nav ul li {
                 margin: 10px 0;
+            }
+            
+            nav ul li a:after {
+                display: none;
             }
             
             .mobile-menu {
@@ -614,7 +652,7 @@
         /* Melhorias específicas para a imagem do herói */
         @media (min-width: 1200px) {
             .hero {
-                background-attachment: fixed; /* Efeito parallax para melhor visualização */
+                background-attachment: fixed;
             }
         }
     </style>
@@ -626,11 +664,11 @@
     <!-- Botões Flutuantes -->
     <div class="floating-buttons">
         <a href="https://www.instagram.com/delegado_olim/" class="floating-button instagram" target="_blank">
-            <span>📷</span>
+            <i class="fab fa-instagram"></i>
             <div class="tooltip">Siga-nos no Instagram</div>
         </a>
         <a href="https://wa.me/5511983707093" class="floating-button whatsapp" target="_blank">
-            <span>💬</span>
+            <i class="fab fa-whatsapp"></i>
             <div class="tooltip">Fale conosco no WhatsApp</div>
         </a>
     </div>
@@ -639,7 +677,7 @@
     <header>
         <div class="container header-container">
             <div class="logo">Delegado<span>Olim</span></div>
-            <div class="mobile-menu">☰</div>
+            <div class="mobile-menu"><i class="fas fa-bars"></i></div>
             <nav>
                 <ul>
                     <li><a href="#home">Início</a></li>
@@ -690,7 +728,7 @@
                         <iframe src="https://www.youtube.com/embed/Ib9O_QPSjHI" title="Vídeo 1" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
-                        <h3>DR.OLIM DEPUTADO E DELEGADO EM CUNHA S.P </h3>
+                        <h3>DR.OLIM DEPUTADO E DELEGADO EM CUNHA S.P</h3>
                         <p>No lançamento do livro "PREVENÇAO EM AÇÃO"e destinou Um Milhão de reais para o Prefeito Rodrigo do Neto para investimento na cidade.</p>
                     </div>
                 </div>
@@ -753,37 +791,37 @@
         </div>
     </section>
 
-    <!-- Vídeos Section -->
-    <section class="videos" id="videos">
+    <!-- Vídeos Section 2 -->
+    <section class="videos" id="videos2">
         <div class="container">
-            <h2>Vídeos em Destaque</h2>
+            <h2>Mais Vídeos</h2>
             <div class="videos-grid">
-                <!-- Vídeo 1 -->
+                <!-- Vídeo 7 -->
                 <div class="video-item">
                     <div class="video-thumb">
-                        <iframe src="https://www.youtube.com/embed/KICGQ_mWKQ0?start=8" title="Vídeo 1" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/KICGQ_mWKQ0?start=8" title="Vídeo 7" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
-                        <h3>PREFEITO DE JAMBEIRO ARIES MARIOTO. </h3>
+                        <h3>PREFEITO DE JAMBEIRO ARIES MARIOTO.</h3>
                         <p>O prefeito de Jambeiro esteve na ALESP, em São Paulo, no evento PREVENÇÃO EM AÇÃO, e falou da importancia deste projeto do Deputado e Delegado Dr.Olim.</p>
                     </div>
                 </div>
                 
-                <!-- Vídeo 2 -->
+                <!-- Vídeo 8 -->
                 <div class="video-item">
                     <div class="video-thumb">
-                        <iframe src="https://www.youtube.com/embed/9FDBdQU9Uwc?start=14" title="Vídeo 2" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/9FDBdQU9Uwc?start=14" title="Vídeo 8" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <h3>GLAUCIO DE OLIVEIRA TENENTE-CORONEL.</h3>
-                        <p>O Tenente-Coronel do Corpo de Bombeiros do Vale do Paraíba esteve no evento na ALESP, em São Paulo, e falou da importância do projeto PREVENÇÃO EM AÇÃO, do Deputado e Delegado Dr.Olim .</p>
+                        <p>O Tenente-Coronel do Corpo de Bombeiros do Vale do Paraíba esteve no evento na ALESP, em São Paulo, e falou da importância do projeto PREVENÇÃO EM AÇÃO, do Deputado e Delegado Dr.Olim.</p>
                     </div>
                 </div>
                 
-                <!-- Vídeo 3 -->
+                <!-- Vídeo 9 -->
                 <div class="video-item">
                     <div class="video-thumb">
-                        <iframe src="https://www.youtube.com/embed/SvGBMpDeMdY?start=6" title="Vídeo 3" allowfullscreen></iframe>
+                        <iframe src="https://www.youtube.com/embed/SvGBMpDeMdY?start=6" title="Vídeo 9" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <h3>PREFEITO DE CUNHA RODRIGO DO NETO.</h3>
@@ -801,7 +839,7 @@
             <div class="contato-container">
                 <div class="contato-info">
                     <div class="info-item">
-                        <div class="info-icon">📞</div>
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
                         <div class="info-content">
                             <h3>WhatsApp</h3>
                             <p>Dra. Eliane: (11) 98370-7096</p>
@@ -809,7 +847,7 @@
                     </div>
                     
                     <div class="info-item">
-                        <div class="info-icon">✉️</div>
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
                         <div class="info-content">
                             <h3>E-mail</h3>
                             <p>delegadoolimnovale@gmail.com</p>
@@ -817,7 +855,7 @@
                     </div>
                     
                     <div class="info-item">
-                        <div class="info-icon">🌐</div>
+                        <div class="info-icon"><i class="fas fa-globe"></i></div>
                         <div class="info-content">
                             <h3>Redes Sociais</h3>
                             <p>Facebook: tvvalenarede Bonani</p>
@@ -849,9 +887,12 @@
                             <textarea id="message" class="form-control" required></textarea>
                         </div>
                         
-                        <div id="formStatus" class="form-status"></div>
+                        <button type="submit" class="btn" id="submitBtn">
+                            <span id="btnText">Enviar Mensagem</span>
+                            <div class="spinner" id="spinner"></div>
+                        </button>
                         
-                        <button type="submit" class="btn" id="submitBtn">Enviar Mensagem</button>
+                        <div class="form-message" id="formMessage"></div>
                     </form>
                 </div>
             </div>
@@ -866,9 +907,9 @@
                     <h3>Delegado Olim</h3>
                     <p>Especialista em segurança pública e direito, compartilhando conhecimento e orientações através de plataformas digitais.</p>
                     <div class="social-links">
-                        <a href="#" title="Facebook">f</a>
-                        <a href="https://www.instagram.com/delegado_olim/" title="Instagram" target="_blank">ig</a>
-                        <a href="#" title="YouTube">YT</a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/delegado_olim/" title="Instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 
@@ -894,15 +935,12 @@
         </div>
     </footer>
 
-    <!-- Incluindo a biblioteca EmailJS -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
     <script>
-        // Inicializar EmailJS com sua chave pública
+        // Inicializar EmailJS
         (function() {
             emailjs.init("V1Lqa3KrlPgX3vqr9");
         })();
-        
+
         // Efeito de Estrelas
         function createStars() {
             const container = document.getElementById('stars-container');
@@ -944,20 +982,28 @@
             });
         });
         
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
         // Form submission com EmailJS
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Verificar se o EmailJS foi carregado corretamente
-            if (typeof emailjs === 'undefined') {
-                showFormStatus('Erro: Biblioteca EmailJS não carregada. Verifique sua conexão.', 'error');
-                return;
-            }
-            
-            // Mudar o texto do botão para indicar processamento
             const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Enviando...';
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Mostrar loading
+            btnText.textContent = 'Enviando...';
+            spinner.style.display = 'block';
             submitBtn.disabled = true;
             
             // Coletar dados do formulário
@@ -965,61 +1011,41 @@
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value,
-                to_email: 'delegadoolimnovale@gmail.com',
-                from_name: document.getElementById('name').value,
-                reply_to: document.getElementById('email').value
+                message: document.getElementById('message').value
             };
             
-            // Verificar se todos os campos obrigatórios estão preenchidos
-            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-                showFormStatus('Por favor, preencha todos os campos obrigatórios.', 'error');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                return;
-            }
-            
-            // Enviar email usando EmailJS
-            emailjs.send('service_1jk3eb', 'template_zyp8f5k', formData)
+            // Enviar email via EmailJS
+            emailjs.send('service_1jk3ebe', 'template_zyp8f5k', formData)
                 .then(function(response) {
                     console.log('SUCCESS!', response.status, response.text);
                     
                     // Mostrar mensagem de sucesso
-                    showFormStatus('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
+                    formMessage.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                    formMessage.className = 'form-message success';
+                    formMessage.style.display = 'block';
                     
                     // Resetar formulário
                     document.getElementById('contactForm').reset();
-                    
-                    // Restaurar botão
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
                 }, function(error) {
                     console.log('FAILED...', error);
                     
-                    // Mostrar mensagem de erro detalhada
-                    let errorMessage = 'Erro ao enviar a mensagem. Tente novamente ou entre em contato por outro meio.';
-                    
-                    if (error.text) {
-                        errorMessage += ` Detalhes: ${error.text}`;
-                    }
-                    
-                    showFormStatus(errorMessage, 'error');
-                    
+                    // Mostrar mensagem de erro
+                    formMessage.textContent = 'Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente pelo WhatsApp.';
+                    formMessage.className = 'form-message error';
+                    formMessage.style.display = 'block';
+                })
+                .finally(function() {
                     // Restaurar botão
-                    submitBtn.textContent = originalText;
+                    btnText.textContent = 'Enviar Mensagem';
+                    spinner.style.display = 'none';
                     submitBtn.disabled = false;
+                    
+                    // Esconder mensagem após 5 segundos
+                    setTimeout(function() {
+                        formMessage.style.display = 'none';
+                    }, 5000);
                 });
         });
-        
-        // Função para mostrar mensagens de status do formulário
-        function showFormStatus(message, type) {
-            const statusDiv = document.getElementById('formStatus');
-            statusDiv.textContent = message;
-            statusDiv.className = 'form-status ' + type;
-            
-            // Rolagem suave para a mensagem de status
-            statusDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
         
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1027,20 +1053,4 @@
                 e.preventDefault();
                 
                 const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Inicializar estrelas
-        createStars();
-    </script>
-</body>
-</html>
+                if(targetId
