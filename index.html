@@ -91,6 +91,12 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
+        .btn:disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         /* Efeito de Estrelas */
         #stars-container {
             position: fixed;
@@ -365,6 +371,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.2);
         }
         
         textarea.form-control {
@@ -935,6 +948,12 @@
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Verificar se o EmailJS foi carregado corretamente
+            if (typeof emailjs === 'undefined') {
+                showFormStatus('Erro: Biblioteca EmailJS não carregada. Verifique sua conexão.', 'error');
+                return;
+            }
+            
             // Mudar o texto do botão para indicar processamento
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
@@ -947,8 +966,18 @@
                 email: document.getElementById('email').value,
                 subject: document.getElementById('subject').value,
                 message: document.getElementById('message').value,
-                to_email: 'delegadoolimnovale@gmail.com'
+                to_email: 'delegadoolimnovale@gmail.com',
+                from_name: document.getElementById('name').value,
+                reply_to: document.getElementById('email').value
             };
+            
+            // Verificar se todos os campos obrigatórios estão preenchidos
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                showFormStatus('Por favor, preencha todos os campos obrigatórios.', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
             
             // Enviar email usando EmailJS
             emailjs.send('service_1jk3eb', 'template_zyp8f5k', formData)
@@ -956,9 +985,7 @@
                     console.log('SUCCESS!', response.status, response.text);
                     
                     // Mostrar mensagem de sucesso
-                    const statusDiv = document.getElementById('formStatus');
-                    statusDiv.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
-                    statusDiv.className = 'form-status success';
+                    showFormStatus('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
                     
                     // Resetar formulário
                     document.getElementById('contactForm').reset();
@@ -969,16 +996,30 @@
                 }, function(error) {
                     console.log('FAILED...', error);
                     
-                    // Mostrar mensagem de erro
-                    const statusDiv = document.getElementById('formStatus');
-                    statusDiv.textContent = 'Erro ao enviar a mensagem. Tente novamente ou entre em contato por outro meio.';
-                    statusDiv.className = 'form-status error';
+                    // Mostrar mensagem de erro detalhada
+                    let errorMessage = 'Erro ao enviar a mensagem. Tente novamente ou entre em contato por outro meio.';
+                    
+                    if (error.text) {
+                        errorMessage += ` Detalhes: ${error.text}`;
+                    }
+                    
+                    showFormStatus(errorMessage, 'error');
                     
                     // Restaurar botão
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
                 });
         });
+        
+        // Função para mostrar mensagens de status do formulário
+        function showFormStatus(message, type) {
+            const statusDiv = document.getElementById('formStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = 'form-status ' + type;
+            
+            // Rolagem suave para a mensagem de status
+            statusDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
