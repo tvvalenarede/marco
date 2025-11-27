@@ -1,160 +1,389 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delegado Olim - Vale do Paraíba</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delegado Olim - Marketing Digital no Vale do Paraíba</title>
+  <meta name="description" content="Dr. Olim - Deputado e Delegado atuando pelo Vale do Paraíba. Segurança pública, transparência e prevenção.">
+  
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
+  <style>
+    /* === Todo o CSS que você já tinha (mantive exatamente igual) === */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    :root {
+      --primary: #1a365d;
+      --secondary: #2d3748;
+      --accent: #e53e3e;
+      --light: #f7fafc;
+      --dark: #2d3748;
+      --gray: #718096;
+    }
+    body { background-color: var(--light); color: var(--dark); line-height: 1.6; overflow-x: hidden; }
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    section { padding: 80px 0; }
+    h1, h2, h3 { margin-bottom: 20px; color: var(--primary); }
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; text-align: center; margin-bottom: 50px; position: relative; }
+    h2:after { content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background-color: var(--accent); }
+    p { margin-bottom: 15px; font-size: 1.1rem; }
+    .btn { display: inline-block; background-color: var(--accent); color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; border: none; cursor: pointer; }
+    .btn:hover { background-color: #c53030; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-    <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    /* Efeito Estrelas, Header, Hero, Sobre, Vídeos, Contato, Footer, Botões Flutuantes e Responsivo */
+    /* (mantive exatamente o mesmo CSS que você enviou – só colei aqui para o código ficar completo) */
+    #stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; overflow: hidden; }
+    .star { position: absolute; background-color: white; border-radius: 50%; animation: twinkle linear infinite; }
+    @keyframes twinkle { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
 
-    <!-- EMAILJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        (function(){
-            emailjs.init("V1Lqa3krlPgX3vqr9"); // PUBLIC KEY
-        })();
-    </script>
+    header { background-color: rgba(255,255,255,0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 1000; backdrop-filter: blur(5px); }
+    .header-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary); }
+    .logo span { color: var(--accent); }
+    nav ul { display: flex; list-style: none; }
+    nav ul li { margin-left: 30px; }
+    nav ul li a { text-decoration: none; color: var(--dark); font-weight: 500; transition: color 0.3s; }
+    nav ul li a:hover { color: var(--accent); }
+    .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; }
 
-    <style>
-        body{margin:0;font-family:Arial;background:#f7f7f7;color:#222}
-        header{position:fixed;top:0;width:100%;background:white;box-shadow:0 2px 10px rgba(0,0,0,0.1);z-index:10;padding:15px 0}
-        .container{width:90%;max-width:1200px;margin:auto}
-        nav ul{display:flex;list-style:none;gap:25px;justify-content:flex-end}
-        nav a{text-decoration:none;color:#222;font-weight:bold}
+    .hero { background: linear-gradient(rgba(26,54,93,0.7), rgba(26,54,93,0.85)), url('OLIMUSAR20.jpg') center/cover no-repeat; color: white; text-align: center; padding: 180px 0 100px; margin-top: 70px; position: relative; }
+    .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.1); z-index: 0; }
+    .hero .container { position: relative; z-index: 1; }
+    .hero h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+    .hero p { font-size: 1.3rem; max-width: 700px; margin: 0 auto 30px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 
-        .hero{margin-top:80px;padding:120px 20px;text-align:center;background:url('OLIMUSAR20.jpg') center/cover no-repeat;position:relative;color:white}
-        .hero:before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.55)}
-        .hero .content{position:relative;z-index:2}
-        .hero h1{font-size:2.8rem;margin-bottom:10px}
+    .sobre { background-color: white; }
+    .sobre-container { display: flex; align-items: center; gap: 50px; }
+    .sobre-img { flex: 1; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .sobre-img img { width: 100%; transition: transform 0.5s; filter: brightness(1.05); }
+    .sobre-img img:hover { transform: scale(1.03); }
 
-        section{padding:60px 0}
-        h2{text-align:center;margin-bottom:30px;color:#1a365d}
+    .videos { background-color: #f8f9fa; }
+    .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+    .video-item { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .video-item:hover { transform: translateY(-10px); }
+    .video-thumb { position: relative; padding-bottom: 56.25%; height: 0; }
+    .video-thumb iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    .video-info { padding: 20px; }
+    .video-info h3 { font-size: 1.2rem; margin-bottom: 10px; }
 
-        .sobre-grid{display:flex;gap:40px;flex-wrap:wrap;align-items:center}
-        .sobre-grid img{width:100%;max-width:450px;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,0.2)}
+    .contato { background-color: white; }
+    .contato-container { display: flex; gap: 50px; }
+    .contato-info { flex: 1; }
+    .contato-form { flex: 1; }
+    .info-item { display: flex; align-items: flex-start; margin-bottom: 30px; }
+    .info-icon { background-color: var(--primary); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+    .form-control { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
+    textarea.form-control { min-height: 150px; resize: vertical; }
 
-        .videos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px}
-        .video-card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+    footer { background-color: var(--primary); color: white; padding: 60px 0 30px; }
+    .footer-container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
+    .footer-col { flex: 1; min-width: 250px; }
+    .footer-col h3 { color: white; margin-bottom: 25px; position: relative; padding-bottom: 10px; }
+    .footer-col h3:after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background-color: var(--accent); }
+    .social-links { display: flex; gap: 15px; margin-top: 20px; }
+    .social-links a { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s; }
+    .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
 
-        /* CONTATO FORM */
-        form{background:white;padding:20px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
-        label{font-weight:bold}
-        input,textarea{width:100%;padding:12px;margin-top:5px;border:1px solid #ccc;border-radius:5px}
-        button{margin-top:15px;background:#e53e3e;color:white;padding:12px 30px;border:none;border-radius:5px;font-size:1rem;cursor:pointer}
-        button:hover{background:#c53030}
+    .floating-buttons { position: fixed; bottom: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 15px; }
+    .floating-button { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.3s; text-decoration: none; }
+    .floating-button:hover { transform: translateY(-5px); }
+    .floating-button.whatsapp { background-color: #25D366; }
+    .floating-button.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .tooltip { position: absolute; right: 70px; background: var(--primary); color: white; padding: 8px 12px; border-radius: 4px; font-size: 14px; white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .floating-button:hover .tooltip { opacity: 1; }
 
-        .msg{display:none;margin-top:15px;padding:12px;border-radius:5px;font-weight:bold}
-        .success{background:#d4edda;color:#155724}
-        .error{background:#f8d7da;color:#721c24}
+    /* Toast simples */
+    #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 16px 30px; border-radius: 50px; z-index: 9999; opacity: 0; transition: opacity 0.4s; }
+    #toast.success { background: #28a745; }
+    #toast.error { background: #dc3545; }
 
-        footer{background:#1a365d;color:white;text-align:center;padding:25px 0;margin-top:40px}
-    </style>
+    @media (max-width: 992px) { .sobre-container, .contato-container { flex-direction: column; } }
+    @media (max-width: 768px) {
+      nav ul { display: none; position: absolute; top: 70px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; box-shadow: 0 10px 10px rgba(0,0,0,0.1); }
+      nav ul.active { display: flex; }
+      .mobile-menu { display: block; }
+      .hero h1 { font-size: 2.4rem; }
+      .floating-button { width: 50px; height: 50px; font-size: 20px; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <div class="container" style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:1.5rem;font-weight:bold;color:#1a365d">Delegado <span style="color:#e53e3e">Olim</span></div>
-        <nav>
-            <ul>
-                <li><a href="#home">Início</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#videos">Vídeos</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+  <!-- Estrelas de fundo
+  <div id="stars-container"></div>
 
-<section class="hero" id="home">
-    <div class="content">
-        <h1>Delegado Olim no Vale do Paraíba</h1>
-        <p style="font-size:1.3rem">Entrega de 2 milhões em recursos para Taubaté, Aparecida, Cunha e Caçapava.</p>
-    </div>
-</section>
+  <!-- Botões Flutuantes WhatsApp + Instagram -->
+  <div class="floating-buttons">
+    <a href="https://www.instagram.com/delegado_olim/" class="floating-button instagram" target="_blank">
+      📷 <div class="tooltip">Siga no Instagram</div>
+    </a>
+    <a href="https://wa.me/5511983707093" class="floating-button whatsapp" target="_blank">
+      💬 <div class="tooltip">Fale no WhatsApp</div>
+    </a>
+  </div>
 
-<section id="sobre">
-    <h2>Sobre o Dr. Olim</h2>
-    <div class="container sobre-grid">
-        <img src="OLIMUSAR.jpg" alt="Dr Olim">
-        <div>
-            <p>O Dr. Olim é referência nacional em segurança pública, atuando há anos como delegado e defensor da justiça.</p>
-            <p>Com forte presença digital, ele compartilha orientações, informações e conteúdos educativos para toda a população.</p>
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-container">
+      <div class="logo">Delegado<span>Olim</span></div>
+      <div class="mobile-menu">☰</div>
+      <nav>
+        <ul>
+          <li><a href="#home">Início</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#videos">Vídeos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container">
+      <h1>Delegado Olim no Vale do Paraíba</h1>
+      <p>O DR.OLIM esteve em Taubaté, Aparecida do Norte, Cunha e Caçapava e fez entrega de 2 Milhões de reais para a região.</p>
+      <a href="#videos" class="btn">Ver Vídeos</a>
+    </div>
+  </section>
+
+  <!-- Sobre -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <h2>Sobre o Dr. Olim</h2>
+      <div class="sobre-container">
+        <div class="sobre-img">
+          <img src="OLIMUSAR.jpg" alt="Dr. Olim">
         </div>
+        <div class="sobre-content">
+          <h3>Biografia</h3>
+          <p>O Dr. Olim é um especialista renomado em segurança pública e direito, com anos de experiência atuando como delegado...</p>
+          <p>Com uma abordagem inovadora, o Dr. Olim utiliza suas plataformas digitais para compartilhar conhecimento...</p>
+          <p>Seu compromisso com a transparência e a educação jurídica o tornou uma referência no segmento...</p>
+          <a href="#contato" class="btn">Entre em Contato</a>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section id="videos">
-    <h2>Vídeos</h2>
-    <div class="container videos-grid">
+  <!-- Vídeos (todos os 9 vídeos em uma única seção) -->
+  <section class="videos" id="videos">
+    <div class="container">
+      <h2>Vídeos em Destaque</h2>
+      <div class="videos-grid">
+        <!-- Vídeo 1 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/Ib9O_QPSjHI" title="DR.OLIM EM CUNHA" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM DEPUTADO E DELEGADO EM CUNHA S.P</h3><p>Lançamento do livro "PREVENÇÃO EM AÇÃO" e entrega de R$ 1 milhão.</p></div>
+        </div>
+        <!-- Vídeo 2 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/TGKAn5h5BXY" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM EM TAUBATÉ</h3><p>Montou barraca para proteger romeiros na Dutra.</p></div>
+        </div>
+        <!-- Vídeo 3 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/VGndFfVQHA4" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM EM CAÇAPAVA</h3><p>Destinou R$ 1 milhão para segurança da cidade.</p></div>
+        </div>
+        <!-- Vídeo 4 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/zF_balQyJTY" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM DESTINOU R$ 1 MILHÃO PARA CAÇAPAVA</h3></div>
+        </div>
+        <!-- Vídeo 5 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/LTgeMXarbTU" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM CHEGANDO EM TAUBATÉ</h3></div>
+        </div>
+        <!-- Vídeo 6 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/10xuInlXlyI" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>DR.OLIM NO RESTAURANTE CAMINHO DE OURO - CUNHA</h3></div>
+        </div>
+        <!-- Vídeo 7 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/KICGQ_mWKQ0?start=8" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>PREFEITO DE JAMBEIRO ARIES MARIOTO</h3></div>
+        </div>
+        <!-- Vídeo 8 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/9FDBdQU9Uwc?start=14" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>TC GLAUCIO DE OLIVEIRA - CORPO DE BOMBEIROS</h3></div>
+        </div>
+        <!-- Vídeo 9 -->
+        <div class="video-item">
+          <div class="video-thumb"><iframe src="https://www.youtube.com/embed/SvGBMpDeMdY?start=6" allowfullscreen></iframe></div>
+          <div class="video-info"><h3>PREFEITO DE CUNHA RODRIGO DO NETO</h3></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="video-card">
-            <iframe width="100%" height="220" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+  <!-- Contato -->
+  <section class="contato" id="contato">
+    <div class="container">
+      <h2>Entre em Contato</h2>
+      <div class="contato-container">
+        <div class="contato-info">
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-content">
+              <h3>WhatsApp</h3>
+              <p>Dra. Eliane: (11) 98370-7096</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-content">
+              <h3>E-mail</h3>
+              <p>delegadoolimnovale@gmail.com</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">🌐</div>
+            <div class="info-content">
+              <h3>Redes Sociais</h3>
+              <p>Instagram: @delegado_olim</p>
+              <p>YouTube: tvvalenarede</p>
+            </div>
+          </div>
         </div>
 
-        <div class="video-card">
-            <iframe width="100%" height="220" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+        <div class="contato-form">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Nome</label>
+              <input type="text" id="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Assunto</label>
+              <input type="text" id="subject" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Mensagem</label>
+              <textarea id="message" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn">Enviar Mensagem</button>
+          </form>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="video-card">
-            <iframe width="100%" height="220" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Delegado Olim</h3>
+          <p>Especialista em segurança pública e direito...</p>
+          <div class="social-links">
+            <a href="#" title="Facebook">f</a>
+            <a href="https://www.instagram.com/delegado_olim/" target="_blank" title="Instagram">ig</a>
+            <a href="#" title="YouTube">YT</a>
+          </div>
         </div>
-
+        <div class="footer-col">
+          <h3>Links Rápidos</h3>
+          <a href="#home">Início</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#videos">Vídeos</a>
+          <a href="#contato">Contato</a>
+        </div>
+        <div class="footer-col">
+          <h3>Contato</h3>
+          <p>Dra. Eliane: (11) 98370-7096</p>
+          <p>delegadoolimnovale@gmail.com</p>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>© 2025 Delegado Olim - Todos os direitos reservados - TV Vale na Rede</p>
+      </div>
     </div>
-</section>
+  </footer>
 
-<section id="contato">
-    <h2>Contato</h2>
-    <div class="container" style="max-width:600px;">
+  <script>
+    // Inicializa EmailJS com sua Public Key
+    emailjs.init("V1Lqa3KrlPgX3vqr9");
 
-        <form id="formContato">
-            <label>Nome</label>
-            <input type="text" name="nome" required>
+    // Estrelas
+    function createStars() {
+      const container = document.getElementById('stars-container');
+      for(let i = 0; i < 150; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 50 + '%';
+        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        star.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(star);
+      }
+    }
 
-            <label>Email</label>
-            <input type="email" name="email" required>
-
-            <label>Mensagem</label>
-            <textarea name="mensagem" rows="5" required></textarea>
-
-            <button type="submit">Enviar Mensagem</button>
-
-            <div id="msgSucesso" class="msg success">Mensagem enviada com sucesso!</div>
-            <div id="msgErro" class="msg error">Erro ao enviar. Tente novamente.</div>
-        </form>
-
-    </div>
-</section>
-
-<footer>
-    <p>© 2025 Delegado Olim - Todos os direitos reservados.</p>
-</footer>
-
-<script>
-// Enviar formulário
-const form = document.getElementById("formContato");
-form.addEventListener("submit", function(e){
-    e.preventDefault();
-
-    const data = {
-        nome: form.nome.value,
-        email: form.email.value,
-        mensagem: form.mensagem.value
-    };
-
-    emailjs.send("service_1jk3ebe", "template_zyp8f5k", data)
-    .then(function(){
-        document.getElementById("msgSucesso").style.display = "block";
-        document.getElementById("msgErro").style.display = "none";
-        form.reset();
-    })
-    .catch(function(){
-        document.getElementById("msgErro").style.display = "block";
-        document.getElementById("msgSucesso").style.display = "none";
+    // Menu mobile
+    document.querySelector('.mobile-menu').addEventListener('click', () => {
+      document.querySelector('nav ul').classList.toggle('active');
     });
-});
-</script>
 
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) {
+          window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+          document.querySelector('nav ul').classList.remove('active'); // fecha menu mobile
+        }
+      });
+    });
+
+    // Toast simples
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = type;
+      toast.style.opacity = 1;
+      setTimeout(() => { toast.style.opacity = 0; }, 4000);
+    }
+
+    // Envio do formulário com EmailJS
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const templateParams = {
+        from_name: document.getElementById('name').value,
+        from_email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      };
+
+      emailjs.send('service_1jk3ebe', 'template_zyp8f5k', templateParams)
+        .then(() => {
+          showToast('Mensagem enviada com sucesso! Entraremos em contato em breve!', 'success');
+          this.reset();
+        })
+        .catch(() => {
+          showToast('Erro ao enviar mensagem. Tente novamente.', 'error');
+        });
+    });
+
+    // Inicializar estrelas
+    createStars();
+  </script>
 </body>
 </html>
