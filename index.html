@@ -1,123 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulário de Contato - TVVALENAREDE</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - TVVALENAREDE IMÓVEIS</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
-            margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-
         .container {
-            width: 100%;
             max-width: 500px;
-            margin: 40px auto;
-            background: #fff;
+            background: #ffffff;
             padding: 25px;
+            margin: auto;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         h2 {
             text-align: center;
+            margin-bottom: 20px;
             color: #333;
         }
-
         label {
             font-weight: bold;
+            margin-top: 10px;
             display: block;
-            margin-top: 15px;
         }
-
         input, textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
             border-radius: 6px;
             border: 1px solid #ccc;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            border: none;
-            background: #007bff;
-            color: #fff;
-            border-radius: 6px;
             font-size: 16px;
+        }
+        textarea {
+            resize: none;
+        }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #0077ff;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
         }
-
         button:hover {
-            background: #0056c8;
+            background: #005dcc;
         }
-
-        .success {
-            color: green;
-            margin-top: 15px;
+        footer {
             text-align: center;
-        }
-
-        .error {
-            color: red;
-            margin-top: 15px;
-            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Contato TVVALENAREDE</h2>
+    <div class="container">
+        <h2>Formulário de Contato</h2>
 
-    <form id="formContato">
-        <label>Nome:</label>
-        <input type="text" name="nome" required />
+        <form action="SEU_ENDPOINT_AQUI" method="POST">
+            
+            <label>Nome:</label>
+            <input type="text" name="nome" required>
 
-        <label>Email:</label>
-        <input type="email" name="email" required />
+            <label>E-mail:</label>
+            <input type="email" name="email" required>
 
-        <label>Mensagem:</label>
-        <textarea name="mensagem" rows="5" required></textarea>
+            <label>Mensagem (até 7 linhas):</label>
+            <textarea name="mensagem" rows="7" required></textarea>
 
-        <button type="submit">Enviar</button>
-    </form>
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+    </div>
 
-    <div id="resultado"></div>
-</div>
-
-<script>
-    const form = document.getElementById("formContato");
-    const resultado = document.getElementById("resultado");
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const dados = new FormData(form);
-
-        try {
-            const resposta = await fetch("https://api.formgrid.com/v1/forms/SEU_FORM_ID_AQUI/submissions", {
-                method: "POST",
-                body: dados
-            });
-
-            if (resposta.ok) {
-                resultado.innerHTML = "<p class='success'>Formulário enviado com sucesso!</p>";
-                form.reset();
-            } else {
-                resultado.innerHTML = "<p class='error'>Erro no envio. Tente novamente.</p>";
-            }
-        } catch (erro) {
-            resultado.innerHTML = "<p class='error'>Falha ao conectar. Verifique sua internet.</p>";
-        }
-    });
-</script>
+    <footer>
+        © TVVALENAREDE IMÓVEIS
+    </footer>
 
 </body>
 </html>
