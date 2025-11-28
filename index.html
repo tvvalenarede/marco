@@ -3,87 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato - TVVALENAREDE</title>
+    <title>Formulário TVVALENAREDE</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
+            background: #f2f2f2;
+            padding: 30px;
         }
-        .container {
-            max-width: 500px;
-            background: #ffffff;
+        form {
+            background: white;
             padding: 25px;
-            margin: auto;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px #ccc;
         }
         input, textarea {
             width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        textarea {
-            resize: none;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
         }
         button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 14px;
-            background: #0077ff;
+            background: #007bff;
             color: white;
-            font-size: 18px;
+            padding: 12px;
+            margin-top: 15px;
             border: none;
-            border-radius: 6px;
+            border-radius: 5px;
+            width: 100%;
             cursor: pointer;
         }
         button:hover {
-            background: #005dcc;
+            background: #0056b3;
         }
-        footer {
-            text-align: center;
+        .success, .error {
             margin-top: 20px;
-            color: #777;
-            font-size: 14px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #c8ffc8;
+            color: #006600;
+        }
+        .error {
+            background: #ffc8c8;
+            color: #660000;
         }
     </style>
 </head>
+
 <body>
 
-    <div class="container">
-        <h2>Formulário de Contato</h2>
+<form id="contact-form">
+    <h2>Enviar Mensagem</h2>
 
-        <form action="https://app.formgrid.com/forms/NZ1A3OrujXAlZIgE/submit" method="POST">
-            
-            <label>Nome:</label>
-            <input type="text" name="nome" required>
+    <!-- Web3Forms Required -->
+    <input type="hidden" name="access_key" value="60460a16-e367-417f-9f2d-c79c400867c0">
 
-            <label>E-mail:</label>
-            <input type="email" name="email" required>
+    <label>Seu Nome:</label>
+    <input type="text" name="name" required>
 
-            <label>Mensagem (até 7 linhas):</label>
-            <textarea name="mensagem" rows="7" required></textarea>
+    <label>Seu E-mail:</label>
+    <input type="email" name="email" required>
 
-            <button type="submit">Enviar Mensagem</button>
-        </form>
-    </div>
+    <label>Mensagem:</label>
+    <textarea name="message" rows="5" required></textarea>
 
-    <footer>
-        © TVVALENAREDE
-    </footer>
+    <button type="submit">Enviar</button>
+
+    <div class="success">Mensagem enviada com sucesso!</div>
+    <div class="error">Ocorreu um erro ao enviar.</div>
+</form>
+
+<script>
+document.getElementById("contact-form").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const form = e.target;
+    const data = new FormData(form);
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: data
+    });
+
+    if(response.ok){
+        form.querySelector(".success").style.display = "block";
+        form.querySelector(".error").style.display = "none";
+        form.reset();
+    } else {
+        form.querySelector(".success").style.display = "none";
+        form.querySelector(".error").style.display = "block";
+    }
+});
+</script>
 
 </body>
 </html>
