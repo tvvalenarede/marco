@@ -870,26 +870,33 @@ document.getElementById("meuFormulario").addEventListener("submit", async functi
     </footer>
 
     <script>
-<script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js">
-</script>
-
 <script>
-  (function() {
-    emailjs.init("V1Lqa3krlPgX3vqr9"); // SUA PUBLIC KEY
-  })();
+document.getElementById("meuFormulario").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-  document.getElementById('contact-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+    const formData = new FormData(this);
 
-    emailjs.sendForm('service_1jk3ebe', 'template_zyp8f5k', this)
-      .then(function() {
-        alert('Mensagem enviada com sucesso!');
-      }, function(error) {
-        alert('Erro ao enviar. Tente novamente.');
-        console.log('FAILED...', error);
-      });
-  });
+    // 🔴 SUBSTITUA PELO SEU ENDPOINT DO FORMGRID
+    const url = "https://api.formgrid.com/v1/forms/SEU_FORM_ID/submissions";
+
+    try {
+        const resposta = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+
+        if (resposta.ok) {
+            document.getElementById("resultado").innerText = "Formulário enviado com sucesso!";
+            this.reset();
+        } else {
+            document.getElementById("resultado").innerText = "Erro ao enviar. Tente novamente.";
+        }
+    } catch (error) {
+        document.getElementById("resultado").innerText = "Falha na conexão.";
+        console.error(error);
+    }
+});
+</script>
 </script>
     </script>
 </body>
