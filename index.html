@@ -793,20 +793,31 @@
                         </div>
                     </div>
                 </div>
-                <form id="contact-form">
-    <label>Nome</label>
-    <input type="text" name="from_name" required>
+                <form id=<form id="meu-formulario">
+  <input type="text" name="from_name" placeholder="Seu Nome" required>
+  <input type="email" name="from_email" placeholder="Seu E-mail" required>
+  <textarea name="message" placeholder="Sua Mensagem" required></textarea>
+  <button type="submit">Enviar</button>
+</form>
 
-    <label>E-mail</label>
-    <input type="email" name="reply_to" required>
+<!-- Inclua a SDK do EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  // Inicialize o EmailJS com sua Public Key
+  emailjs.init('SUA_PUBLIC_KEY');
 
-    <label>Assunto</label>
-    <input type="text" name="subject" required>
-
-    <label>Mensagem</label>
-    <textarea name="message" required></textarea>
-
-    <button type="submit">Enviar Mensagem</button>
+  // Manipule o envio do formulário
+  document.getElementById('meu-formulario').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    emailjs.sendForm('SEU_SERVICE_ID', 'SEU_TEMPLATE_ID', this)
+      .then(function() {
+        alert('Mensagem enviada com sucesso!');
+      }, function(error) {
+        alert('Falha ao enviar a mensagem: ' + JSON.stringify(error));
+      });
+  });
+</script>
 </form>
                
 
